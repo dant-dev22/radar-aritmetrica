@@ -1,0 +1,73 @@
+# --- Archivos de entorno y configuración ---
+.env
+*.env
+.env.*
+
+# --- Archivos de Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Entornos virtuales ---
+venv/
+.env/
+.venv/
+env/
+venv.bak/
+env.bak/
+
+# --- Archivos de dependencias / build ---
+*.egg-info/
+dist/
+build/
+*.spec
+
+# --- Archivos de logs ---
+*.log
+logs/
+*.out
+
+# --- Archivos temporales del sistema operativo ---
+.DS_Store
+Thumbs.db
+
+# --- Archivos de pruebas ---
+.coverage
+.pytest_cache/
+htmlcov/
+
+# --- Configuración de IDEs / editores ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- Archivos de AWS Lambda / Serverless ---
+package.zip
+lambda_function.zip
+.aws-sam/
+.sls/
+serverless/
+
+# --- Archivos de caché ---
+.cache/
+.mypy_cache/
+__pypackages__/
+pip-wheel-metadata/
+site/
+
+# --- Archivos de Docker (si llegas a usarlo) ---
+*.pid
+*.seed
+*.pid.lock
+
+# --- Archivos de Node.js (por si usas frontend) ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- Archivos de configuración local ---
+*.local
+*.bak
+*.tmp

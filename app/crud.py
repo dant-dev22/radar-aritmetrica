@@ -1,4 +1,5 @@
 from config import get_db_connection
+import pymysql
 from pymysql.err import IntegrityError
 
 def create_user_in_db(email: str, password: str):

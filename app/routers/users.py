@@ -2,6 +2,7 @@ import logging
 from fastapi import APIRouter, HTTPException
 from app.schemas import UserCreate, UserUpdate
 from app import crud
+import pymysql
 
 # Configure logger
 logger = logging.getLogger("users_router")
@@ -9,24 +10,21 @@ logger.setLevel(logging.INFO)
 
 router = APIRouter(prefix="/users", tags=["users"])
 
-@router.get("/test-db")
-def test_db():
-    import pymysql
-    import os
+@router.get("/users-test")
+def users_test():
+    conn = pymysql.connect(
+        host=os.getenv("DB_HOST"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_NAME"),
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, email FROM users LIMIT 1")
+    result = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return {"result": result}
 
-    try:
-        conn = pymysql.connect(
-            host=os.getenv("DB_HOST"),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASSWORD"),
-            database=os.getenv("DB_NAME"),
-            port=int(os.getenv("DB_PORT", 3306)),
-            connect_timeout=5  # reduce tiempo de espera
-        )
-        conn.close()
-        return {"status": "DB connection successful"}
-    except Exception as e:
-        return {"status": "DB connection failed", "error": str(e)}
 
 @router.get("/ping")
 def ping():

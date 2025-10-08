@@ -74,7 +74,7 @@ def create_user(user: UserCreate):
         raise HTTPException(status_code=500, detail="Internal server error")
 
 
-@router.get("/")
+@router.get("/all-users")
 def get_users():
     logger.info("GET /users called")
     try:

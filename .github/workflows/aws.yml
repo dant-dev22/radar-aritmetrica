@@ -44,5 +44,5 @@ jobs:
     - name: Deploy to Lambda
       run: |
         aws lambda update-function-code \
-          --function-name radarapi-lambda \
+          --function-name radar-base \
           --zip-file fileb://deployment-package.zip

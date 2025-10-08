@@ -16,7 +16,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.11'  # Cambia si tu Lambda usa otra versión
+        python-version: '3.10'  # Cambia si tu Lambda usa otra versión
 
     - name: Install zip utility
       run: sudo apt-get update && sudo apt-get install -y zip

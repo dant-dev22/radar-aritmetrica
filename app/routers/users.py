@@ -15,13 +15,16 @@ if not logger.handlers:
 
 router = APIRouter(prefix="/users", tags=["users"])
 
-# Función interna para conectarse a la DB
+# ----------------------------
+# Función interna de conexión
+# ----------------------------
 def get_db_connection():
     return pymysql.connect(
         host=os.getenv("DB_HOST"),
         user=os.getenv("DB_USER"),
         password=os.getenv("DB_PASSWORD"),
         database=os.getenv("DB_NAME"),
+        cursorclass=pymysql.cursors.DictCursor,  # Homogeneiza todas las consultas
     )
 
 # ----------------------------
@@ -43,10 +46,12 @@ def users_test():
         logger.error(f"users_test error: {e}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
+
 @router.get("/ping")
 def ping():
     logger.info("GET ping called")
     return "hola mundo"
+
 
 @router.post("/")
 def create_user(user: UserCreate):
@@ -54,8 +59,7 @@ def create_user(user: UserCreate):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        sql = "INSERT INTO users (email, password) VALUES (%s, %s)"
-        cursor.execute(sql, (user.email, user.password))
+        cursor.execute("INSERT INTO users (email, password) VALUES (%s, %s)", (user.email, user.password))
         conn.commit()
         user_id = cursor.lastrowid
         cursor.close()
@@ -69,12 +73,13 @@ def create_user(user: UserCreate):
         logger.error(f"Unexpected error in create_user: {e}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
+
 @router.get("/")
 def get_users():
     logger.info("GET /users called")
     try:
         conn = get_db_connection()
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor = conn.cursor()
         cursor.execute("SELECT id, email FROM users")
         users = cursor.fetchall()
         cursor.close()
@@ -85,12 +90,13 @@ def get_users():
         logger.error(f"Error fetching users: {e}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
+
 @router.get("/{user_id}")
 def get_user(user_id: int):
     logger.info(f"GET /users/{user_id} called")
     try:
         conn = get_db_connection()
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor = conn.cursor()
         cursor.execute("SELECT id, email FROM users WHERE id = %s", (user_id,))
         user = cursor.fetchone()
         cursor.close()
@@ -103,6 +109,7 @@ def get_user(user_id: int):
     except Exception as e:
         logger.error(f"Error fetching user {user_id}: {e}")
         raise HTTPException(status_code=500, detail="Internal server error")
+
 
 @router.put("/{user_id}")
 def update_user(user_id: int, user: UserUpdate):
@@ -136,6 +143,7 @@ def update_user(user_id: int, user: UserUpdate):
     except Exception as e:
         logger.error(f"Error updating user {user_id}: {e}")
         raise HTTPException(status_code=500, detail="Internal server error")
+
 
 @router.delete("/{user_id}")
 def delete_user(user_id: int):

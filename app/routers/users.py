@@ -9,6 +9,11 @@ logger.setLevel(logging.INFO)
 
 router = APIRouter(prefix="/users", tags=["users"])
 
+@router.get("/ping")
+def ping():
+    logger.info("GET ping called")
+    return "hola mundo"
+
 @router.post("/")
 def create_user(user: UserCreate):
     logger.info(f"POST /users called with email={user.email}")

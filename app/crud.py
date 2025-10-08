@@ -1,7 +1,6 @@
 import logging
 from config import get_db_connection
 import pymysql
-import os
 from pymysql.err import IntegrityError
 
 # Configuración básica del logger

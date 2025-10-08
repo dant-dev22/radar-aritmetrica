@@ -2,6 +2,7 @@ import logging
 from fastapi import APIRouter, HTTPException
 from app.schemas import UserCreate, UserUpdate
 from app import crud
+import os
 import pymysql
 
 # Configure logger
